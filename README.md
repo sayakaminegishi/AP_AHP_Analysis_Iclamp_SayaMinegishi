@@ -11,5 +11,6 @@ Detects bursts and singlet AP spikes from either a single abf file or a batch of
 
 For any questions or concerns, please feel free to contact me at minegishis@brandeis.edu
 
-Thanks,
+
+
 Sayaka (Saya) Minegishi
