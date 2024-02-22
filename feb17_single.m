@@ -23,7 +23,7 @@ myVarnames1 = {'cell name', 'AP_frequency(Hz)', 'threshold (mV)', 'amplitude (mV
 T1= array2table(multipleVariablesTable, 'VariableNames', myVarnames1); %stores info from all the sweeps in an abf file
 
 
-filename1 = "2016_09_27_01_0001.abf";
+filename1 = "2016_09_08_03_0003.abf";
 
 
 [dataallsweeps, si, h] =abf2load(filename1); %get si and h values from this abf file

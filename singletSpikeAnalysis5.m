@@ -36,10 +36,19 @@ for j = 1:size(singletTimesMatrix,1)
     
 
     risingDuration = 1279-947; %obtained by visual inspection
+    fallingDuration = ms_to_sampleunits(si,6040.2-5699.7)
    %fallingDuration = 1542-1279;
-   fallingDuration = ms_to_sampleunits(si,235671-234662); %peak of AP to end of AHP, in sample units
+   %fallingDuration = ms_to_sampleunits(si,235671-234662); %peak of AP to end of AHP, in sample units
 
     [test_spike,starttime,endtime] = extract_waveform3(risingDuration,fallingDuration, mainpeakloc, data); %in sample units
+    
+    %when there is more than 1 spike in test_spike, reduce time for AHP
+    pks_in_testspike = get_spikelocations(test_spike,dV_thresh); %get AP spike times in test_spike
+    if(numel(pks_in_testspike) > 1)
+        fallduration_sm = pks_in_testspike(2)-pks_in_testspike(1)-risingDuration; %falling duration of the first spike in test_spike in sample units
+        [test_spike,starttime,endtime] = extract_waveform3(risingDuration,fallduration_sm, mainpeakloc, data); %in sample units
+    end
+
     
     figure(8)
     plot(test_spike)
