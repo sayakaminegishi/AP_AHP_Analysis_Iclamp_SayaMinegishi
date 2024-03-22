@@ -8,11 +8,13 @@ Detects bursts and singlet AP spikes from either a single abf file or a batch of
 • **“CMA_batch_analysisFeb17.m”** –click on Run button to analyze all abf files in the same directory where this script & its function scripts are stored. Gives results for each file in tables.
 
  • **“feb17_single.m”** – run analysis on an abf file of interest. Specify its file name after “filename1=”. Then hit Run.
+ 
+ 
+ • **Mar22_batchEVOKED.m (relies on analyzeSingleEvoked.m)** - performs batch analysis of all ABF files in the folder. Analyzes the properties of the first AP detected in each cell.
+ • **Mar22_singleEVOKED.m** - analysis of the first AP detected from a cell (abf file) of interest. 
 
- • **“Feb23_batchEVOKED.m”** – click run to perform batch-analysis on the properties of the FIRST AP DETECTED IN EACH CELL (+freq in the trace). Creates a summary table. For evoked samples.
 
- • **“Feb23_singleEVOKED.m”** – specify abf file, click run to perform single-cell analysis on the properties of the FIRST AP DETECTED IN THE ABF FILE (+freq in the trace). Creates a summary table. Used for analysis of evoked samples.
-
+Scripts were checked for accuracy by visual inspection and by comparing with the results from pclamp's analysis tool when applicable. 
 
 For any questions or concerns, please feel free to contact me at minegishis@brandeis.edu
 
