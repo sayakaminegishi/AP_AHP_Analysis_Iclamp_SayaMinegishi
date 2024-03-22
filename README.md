@@ -5,12 +5,12 @@ Detects bursts and singlet AP spikes from either a single abf file or a batch of
 
  NB: store the abf files of interest in the SAME DIRECTORY (same folder) as the rest of the scripts! Sample files to test are in the zip folder (you have to open it and copy-paste the files into your working folder).
 
-#### For analysis of Spontaneous Recordings:
+### For analysis of Spontaneous Recordings:
 • **“CMA_batch_analysisFeb17.m”** –click on Run button to analyze all abf files in the same directory where this script & its function scripts are stored. Gives results for each file in tables.
 
  • **“feb17_single.m”** – run analysis on an abf file of interest. Specify its file name after “filename1=”. Then hit Run.
  
-#### For analysis of Evoked Recordings:
+### For analysis of Evoked Recordings:
  • **Mar22_batchEVOKED.m (relies on analyzeSingleEvoked.m)** - performs batch analysis of all ABF files in the folder. Analyzes the properties of the first AP detected in each cell.
  
  • **Mar22_singleEVOKED.m** - analysis of the first AP detected from a cell (abf file) of interest. 
