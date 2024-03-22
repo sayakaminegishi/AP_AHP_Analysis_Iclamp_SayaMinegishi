@@ -11,6 +11,7 @@ Detects bursts and singlet AP spikes from either a single abf file or a batch of
  
  
  • **Mar22_batchEVOKED.m (relies on analyzeSingleEvoked.m)** - performs batch analysis of all ABF files in the folder. Analyzes the properties of the first AP detected in each cell.
+ 
  • **Mar22_singleEVOKED.m** - analysis of the first AP detected from a cell (abf file) of interest. 
 
 
