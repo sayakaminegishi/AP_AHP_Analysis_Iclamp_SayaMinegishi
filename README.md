@@ -1,4 +1,4 @@
-# AP_AHP_Analysis IClamp
+# AP_AHP_Analysis_Iclamp_SayaMinegishi
 Detects bursts and singlet AP spikes from either a single abf file or a batch of abf files in the same directory, and gives summary tables (with excel exports) of action potential and afterhyperpolarization properties. Used for current-clamp recordings.
 
 ## Description of each script that you can run
