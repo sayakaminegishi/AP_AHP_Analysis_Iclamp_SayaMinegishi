@@ -91,11 +91,12 @@ current_injected = current_injected1; %stimulus current
                     %rising and falling durations of an AP
                     risingDuration = mainpeakloc - threshold_pt; %in sample units
                     
+                    maxlength_pulse = 5248; %end pt of current pulse. obtained by visual inspection.
                     %find falling duration.
                     if(numel(pks_in_trace)>1)
                         fallingDuration = pks_in_trace(2)-mainpeakloc-risingDuration; %in sample units
                     else
-                        fallingDuration = numel(data) - mainpeakloc;
+                        fallingDuration = maxlength_pulse - mainpeakloc;
                     end
 
         
@@ -105,7 +106,7 @@ current_injected = current_injected1; %stimulus current
                        
                    
             
-                     figure(8)
+                    figure;
                 plot(test_spike)
             
             

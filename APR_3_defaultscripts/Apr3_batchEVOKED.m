@@ -29,7 +29,7 @@ filesNotWorking = []; %list of files with errors
 list = dir('*.abf');
 file_names = {list.name}; %list of all abf file names in the directory 
 
-filenameExcelDoc = strcat('Apr3SHREVOKED.xlsx');
+filenameExcelDoc = strcat('Jason_comp_2005_01_21_Apr3.xlsx');
 myVarnames1= {'cell_name', 'current_injected(pA)','frequency(Hz)','spike_location(ms)', 'threshold(mV)', 'amplitude(mV)', 'AHP_amplitude(mV)', 'trough value (mV)', 'trough location(ms)', 'peak value(mV)', 'peak location(ms)', 'half_width(ms)', 'AHP_30_val(mV)', 'AHP_50_val(mV)', 'AHP_70_val(mV)', 'AHP_90_val(mV)', 'half_width_AHP(ms)', 'AHP_width_10to10%(ms)', 'AHP_width_30to30%(ms)', 'AHP_width_70to70%(ms)', 'AHP_width_90to90%(ms)','AHP_width_90to30%(ms)', 'AHP_width_10to90%(ms)' };
 
 multipleVariablesTable= zeros(0,numel(myVarnames1));
@@ -66,3 +66,11 @@ filesthatworkedcount = size(file_names,2) - size(filesNotWorking, 1);
 display(filesthatworkedcount + " out of " + size(file_names,2) + " traces analyzed successfully.");
 
 writetable(T1, filenameExcelDoc, 'Sheet', 1); %export summary table to excel
+
+
+%%%%%%%%%%%
+display(mean(double(T1.("amplitude(mV)"))))
+display(mean(double(T1.("half_width(ms)"))))
+display(mean(double(T1.("AHP_amplitude(mV)"))))
+display(mean(double(T1.("half_width_AHP(ms)"))))
+display(mean(double(T1.("AHP_width_90to30%(ms)"))))
