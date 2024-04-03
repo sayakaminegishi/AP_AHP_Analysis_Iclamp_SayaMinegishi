@@ -10,10 +10,8 @@ function sampleunits = ms_to_sampleunits(si, sample_in_ms)
 % contact: minegishis@brandeis.edu
 % date: Nov 23 2023
 
-sampleunits = (sample_in_ms*10^3)/si; %convert to microseconds, then divide by sampling interval to get total number of samples
+samplinginterval = si * 0.001; %convert sampling interval from us to miliseconds. this is the no. of miliseconds per 1 sample unit.
 
-% samplinginterval = si * 0.001; %convert sampling interval from us to miliseconds. this is the no. of miliseconds per 1 sample unit.
-% 
-% sampleunits = 1/samplinginterval * sample_in_ms; %value in units of miliseconds
-% sampleunits = round(sampleunits);
+sampleunits = 1/samplinginterval * sample_in_ms; %value in units of miliseconds
+sampleunits = round(sampleunits);
 end

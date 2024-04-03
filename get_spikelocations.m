@@ -4,6 +4,6 @@ function spikelocations = get_spikelocations(trace,threshold_value)
 % Contact: minegishis@brandeis.edu
 % Date: August 22, 2023
 
-[pks,spikelocations] = findpeaks(trace,'MinPeakHeight', threshold_value,'MinPeakProminence',5); %find peak values and their locations for all peaks above spike threshold
+[pks,spikelocations] = findpeaks(trace,'MinPeakHeight', threshold_value, 'MinPeakProminence',5); %find peak values and their locations for all peaks above spike threshold
 
 end
