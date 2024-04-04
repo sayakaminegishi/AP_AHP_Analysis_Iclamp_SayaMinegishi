@@ -95,19 +95,18 @@ current_injected = current_injected1; %stimulus current
                     
                     maxlength_pulse = 5248; %end pt of current pulse. obtained by visual inspection.
                     %find falling duration.
-                    % if(numel(pks_in_trace)>1)
-                    %     fallingDuration = pks_in_trace(2)-mainpeakloc-risingDuration; %in sample units
-                   
-
-
-                    rangetolook = data(maintroughloc:maxlength_pulse);
-                    thresh_pt_2_candidates = threshold_crossings( rangetolook, threshold_value );
-
-                    if numel(thresh_pt_2_candidates) >=1
-                        threshpt2 = maintroughloc+ thresh_pt_2_candidates(1); %time where the first AP ends
-                        fallingDuration = threshpt2-mainpeakloc;
+                    if(numel(pks_in_trace)>1)
+                        fallingDuration = pks_in_trace(2)-mainpeakloc-risingDuration; %in sample units
                     else
-                       
+                        % TODO: FIX!!!
+                        %find the first time after trough where signal
+                        % %reaches thresh again
+                        rangetolook = data(maintroughloc:maxlength_pulse)
+                        thresh_pt_2 = find(diff(rangetolook))
+
+
+
+
                         fallingDuration = maxlength_pulse - mainpeakloc;
                     end
 
