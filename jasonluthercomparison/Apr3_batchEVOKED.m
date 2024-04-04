@@ -18,7 +18,7 @@ list = dir('*.abf');%This script finds the firing properties of the FIRST AP eve
 
 % Created by: Sayaka (Saya) Minegishi
 % minegishis@brandeis.edu
-% Feb 23 2024
+% Apr 3 2024
 
  %start loading files
 close all
@@ -66,3 +66,11 @@ filesthatworkedcount = size(file_names,2) - size(filesNotWorking, 1);
 display(filesthatworkedcount + " out of " + size(file_names,2) + " traces analyzed successfully.");
 
 writetable(T1, filenameExcelDoc, 'Sheet', 1); %export summary table to excel
+
+
+%%%%%%%%%%%
+display(mean(double(T1.("amplitude(mV)"))))
+display(mean(double(T1.("half_width(ms)"))))
+display(mean(double(T1.("AHP_amplitude(mV)"))))
+display(mean(double(T1.("half_width_AHP(ms)"))))
+display(mean(double(T1.("AHP_width_90to30%(ms)"))))

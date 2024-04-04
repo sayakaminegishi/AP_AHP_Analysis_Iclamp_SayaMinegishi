@@ -8,7 +8,7 @@ function M1 = analyzeSingleEvokedApr3(filename1, current_injected1)
 
 % Created by: Sayaka (Saya) Minegishi
 % minegishis@brandeis.edu
-% Feb 23 2024
+% Apr 3 2024
 
 filename = filename1; %specify file to examine
 
@@ -82,20 +82,31 @@ current_injected = current_injected1; %stimulus current
               
                 
                 pks_in_trace = get_spikelocations(data,dV_thresh); %get AP spike times in trace
+                [~,troughlocations] = findpeaks(-data, 'MinPeakProminence',5); %get all trough locations
                 
                 if(numel(pks_in_trace)>=1)
                     
                     mainpeakloc = pks_in_trace(1);
-                    
+                    maintroughloc = troughlocations(1);
+
                     threshold_voltage = data(all_dV_filtered(1)); 
                     %rising and falling durations of an AP
                     risingDuration = mainpeakloc - threshold_pt; %in sample units
                     
+                    maxlength_pulse = 5248; %end pt of current pulse. obtained by visual inspection.
                     %find falling duration.
-                    if(numel(pks_in_trace)>1)
-                        fallingDuration = pks_in_trace(2)-mainpeakloc-risingDuration; %in sample units
+                  
+
+
+                    rangetolook = data(maintroughloc:maxlength_pulse);
+                    thresh_pt_2_candidates = threshold_crossings( rangetolook, threshold_value );
+
+                    if numel(thresh_pt_2_candidates) >=1
+                        threshpt2 = maintroughloc+ thresh_pt_2_candidates(1); %time where the first AP ends
+                        fallingDuration = threshpt2-mainpeakloc;
                     else
-                        fallingDuration = numel(data) - mainpeakloc;
+                       
+                        fallingDuration = maxlength_pulse - mainpeakloc;
                     end
 
         
