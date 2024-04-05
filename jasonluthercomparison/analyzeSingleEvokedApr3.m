@@ -101,15 +101,33 @@ current_injected = current_injected1; %stimulus current
                     rangetolook = data(maintroughloc:maxlength_pulse);
                     thresh_pt_2_candidates = threshold_crossings( rangetolook, threshold_value );
 
-                    if numel(thresh_pt_2_candidates) >=1
-                        threshpt2 = maintroughloc+ thresh_pt_2_candidates(1); %time where the first AP ends
-                        fallingDuration = threshpt2-mainpeakloc;
-                    else
-                       
-                        fallingDuration = maxlength_pulse - mainpeakloc;
-                    end
 
-        
+
+                    % if numel(thresh_pt_2_candidates) >=1
+                    %     threshpt2 = maintroughloc+ thresh_pt_2_candidates(1); %time where the first AP ends
+                    %     fallingDuration = threshpt2-mainpeakloc;
+                    % else
+                    % 
+                    %     fallingDuration = maxlength_pulse - mainpeakloc;
+                    % end
+
+
+                    %falling duration - method2 - find where slope sign changes
+                
+                    f=smoothdata(rangetolook, "gaussian"); %smooth out noise with gaussian filter after trough pt
+                    negative_slope = find(diff(f)<0);
+                    
+                    if(numel(negative_slope)>=1)
+
+                        slopedecreasept = maintroughloc + negative_slope(1);
+
+                    else
+                        slopedecreasept = maxlength_pulse;
+                    end
+                    fallingDuration = slopedecreasept- mainpeakloc;
+                    
+
+                    
 
                     [test_spike,starttime,endtime] = extract_waveform3(risingDuration,fallingDuration, mainpeakloc, data); %in sample units
         
