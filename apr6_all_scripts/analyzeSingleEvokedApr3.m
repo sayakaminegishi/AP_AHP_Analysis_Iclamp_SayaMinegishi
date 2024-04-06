@@ -52,6 +52,12 @@ current_injected = current_injected1; %stimulus current
         x_axis_actual = sampleunits_to_ms(si, x_axis_samples);
         %threshold minimum
 
+        figure(1)
+        plot(x_axis_actual, data, 'r')
+        xlabel("time (ms)")
+        ylabel("mv")
+
+       
         
         
             alloweddeviation = 40;%if 30, anything within 30mV of resting potential (first value in trace) is deemed as noise
@@ -120,7 +126,11 @@ current_injected = current_injected1; %stimulus current
                     %falling duration - method2 - find where slope sign changes
                 
                     f=smoothdata(rangetolook, "gaussian"); %smooth out noise with gaussian filter after trough pt
-                    negative_slope = find(diff(f)<0);
+                    
+                    figure(2)
+                    plot(diff(f))
+                    
+                    negative_slope = find(diff(f)<=0);
                     
                     if(numel(negative_slope)>=1)
 
@@ -143,9 +153,6 @@ current_injected = current_injected1; %stimulus current
                        
                    
             
-                    figure;
-                plot(test_spike)
-            
             
                %analyze the first spike in cell
                 total_count_Aps = numel(pks_in_trace); %count total no. of APs in first sweep where AP is detected
@@ -163,13 +170,16 @@ current_injected = current_injected1; %stimulus current
                 maxpoint = find(test_spike == max(test_spike));
                 maxpoint = maxpoint(1);
             
-                % Find the minimum value in the specified portion
-                minValue = min(test_spike(maxpoint:end));
-            
-                % Find the index of the minimum value in the specified portion
-                minpoint = find(test_spike(maxpoint:end) == minValue, 1, 'first') + maxpoint - 1;
-            
-                minpoint_val = test_spike(minpoint);
+                % % Find the minimum value in the specified portion
+                % minValue = min(test_spike(maxpoint:end));
+                % 
+                % % Find the index of the minimum value in the specified portion
+                % minpoint = find(test_spike(maxpoint:end) == minValue, 1, 'first') + maxpoint - 1;
+                % 
+                % minpoint_val = test_spike(minpoint);
+
+                [minpoint_val, minpoint] = min(test_spike);
+
             
                 
             
@@ -205,6 +215,11 @@ current_injected = current_injected1; %stimulus current
                 [~, ind_90_dec] = min(abs(vq_maxToMin-AHP_90));
                 [~, ind_70_dec] = min(abs(vq_maxToMin-AHP_70));
                 [~, ind_50_dec] = min(abs(vq_maxToMin-AHP_50));  
+                
+
+                
+
+
                 % interpolation of y values between 1 to max pt
                 x3 = 1:maxpoint;
                 xq_1tomax= x3(1):0.2:x3(end);
@@ -238,7 +253,12 @@ current_injected = current_injected1; %stimulus current
                dec90_30w = 0.2 * sampleunits_to_ms(si,  AHP_decay_90to30);
                dec10_90w = 0.2 * sampleunits_to_ms(si,  AHP_decay_10to90);
                         
-             
+             % NOT WORKING: ask why
+               % figure(5)
+               %  plot(test_spike)
+               %  hold on
+               %  plot(numel(vq_maxToMin)+ind_10_rise, test_spike(numel(vq_maxToMin)+ind_10_rise), 'ro')
+
                         
                 %%%%%%%% AP properties %%%%%%%%%%%%%%%%%%%%%%%%%%%%
                 interp_hw_AP = numel(vq_1tomax)+ AP_50_dec - AP_50_rise;
