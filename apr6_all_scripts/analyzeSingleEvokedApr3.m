@@ -8,7 +8,7 @@ function M1 = analyzeSingleEvokedApr3(filename1, current_injected1)
 
 % Created by: Sayaka (Saya) Minegishi
 % minegishis@brandeis.edu
-% Apr 5 2024
+% Apr 6 2024
 
 filename = filename1; %specify file to examine
 
@@ -113,18 +113,6 @@ current_injected = current_injected1; %stimulus current
                     end
 
 
-                    thresh_pt_2_candidates = threshold_crossings( rangetolook, threshold_value );
-                    % if numel(thresh_pt_2_candidates) >=1
-                    %     threshpt2 = maintroughloc+ thresh_pt_2_candidates(1); %time where the first AP ends
-                    %     fallingDuration = threshpt2-mainpeakloc;
-                    % else
-                    % 
-                    %     fallingDuration = maxlength_pulse - mainpeakloc;
-                    % end
-
-
-                    %falling duration - method2 - find where slope sign changes
-                
                     f=smoothdata(rangetolook, "gaussian"); %smooth out noise with gaussian filter after trough pt
                     
                     figure(2)
@@ -161,7 +149,8 @@ current_injected = current_injected1; %stimulus current
                 freq_in_hz = total_count_Aps/totalduration_sec; %frequency of the sweep with the first AP detected in cell.
             
                 amplitude = max(test_spike) - test_spike(1);
-                AHP_amp_real = min(test_spike) - test_spike(1);
+                %AHP_amp_real = min(test_spike) - test_spike(1);
+                AHP_amp_real = min(test_spike) - test_spike(end); %AHP amp is measured from the pt where AHP stops repolarizing
                 AHP_amp = abs(AHP_amp_real);
 
                 max_voltage = data(mainpeakloc);
@@ -170,15 +159,9 @@ current_injected = current_injected1; %stimulus current
                 maxpoint = find(test_spike == max(test_spike));
                 maxpoint = maxpoint(1);
             
-                % % Find the minimum value in the specified portion
-                % minValue = min(test_spike(maxpoint:end));
-                % 
-                % % Find the index of the minimum value in the specified portion
-                % minpoint = find(test_spike(maxpoint:end) == minValue, 1, 'first') + maxpoint - 1;
-                % 
-                % minpoint_val = test_spike(minpoint);
-
                 [minpoint_val, minpoint] = min(test_spike);
+
+                AHP_repolarizationtime = sampleunits_to_ms(si, numel(test_spike) - minpoint); %rise time for AHP (repolarization)
 
             
                 

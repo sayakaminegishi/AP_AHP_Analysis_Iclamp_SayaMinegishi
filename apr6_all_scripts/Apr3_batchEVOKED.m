@@ -69,10 +69,9 @@ writetable(T1, filenameExcelDoc, 'Sheet', 1); %export summary table to excel
 
 
 %%%%%%%%%%%
-display(mean(double(T1.("amplitude(mV)"))))
-display(mean(double(T1.("half_width(ms)"))))
-display(mean(double(T1.("AHP_amplitude(mV)"))))
-display(mean(double(T1.("half_width_AHP(ms)"))))
-display(mean(double(T1.("AHP_width_90to30%(ms)"))))
-display(mean(double(T1.("risetime(ms)"))));
-display(mean(double(T1.("decaytime(ms)"))));
+display("Amplitude = " + mean(double(T1.("amplitude(mV)"))))
+display("half width = " + mean(double(T1.("half_width(ms)"))))
+display("AHP amp = " + mean(double(T1.("AHP_amplitude(mV)"))))
+display("half width ahp = " + mean(double(T1.("half_width_AHP(ms)"))))
+display("ahpwidth 90-30% = " + mean(double(T1.("AHP_width_90to30%(ms)"))))
+display("risetime AP = " + mean(double(T1.("risetime(ms)"))));
