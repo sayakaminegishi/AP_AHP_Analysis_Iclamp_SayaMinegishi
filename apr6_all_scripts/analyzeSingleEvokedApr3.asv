@@ -8,11 +8,11 @@ function M1 = analyzeSingleEvokedApr3(filename1, current_injected1)
 
 % Created by: Sayaka (Saya) Minegishi
 % minegishis@brandeis.edu
-% Apr 3 2024
+% Apr 5 2024
 
 filename = filename1; %specify file to examine
 
-myVarnames1= {'cell_name', 'current_injected(pA)','frequency(Hz)','spike_location(ms)', 'threshold(mV)', 'amplitude(mV)', 'AHP_amplitude(mV)', 'trough value (mV)', 'trough location(ms)', 'peak value(mV)', 'peak location(ms)', 'half_width(ms)', 'AHP_30_val(mV)', 'AHP_50_val(mV)', 'AHP_70_val(mV)', 'AHP_90_val(mV)', 'half_width_AHP(ms)', 'AHP_width_10to10%(ms)', 'AHP_width_30to30%(ms)', 'AHP_width_70to70%(ms)', 'AHP_width_90to90%(ms)','AHP_width_90to30%(ms)', 'AHP_width_10to90%(ms)' };
+myVarnames1= {'cell_name', 'current_injected(pA)','frequency(Hz)','spike_location(ms)', 'threshold(mV)', 'amplitude(mV)', 'AHP_amplitude(mV)', 'trough value (mV)', 'trough location(ms)', 'peak value(mV)', 'peak location(ms)', 'half_width(ms)', 'AHP_30_val(mV)', 'AHP_50_val(mV)', 'AHP_70_val(mV)', 'AHP_90_val(mV)', 'half_width_AHP(ms)', 'AHP_width_10to10%(ms)', 'AHP_width_30to30%(ms)', 'AHP_width_70to70%(ms)', 'AHP_width_90to90%(ms)','AHP_width_90to30%(ms)', 'AHP_width_10to90%(ms)', 'risetime(ms)', 'decaytime(ms)' };
 
 multipleVariablesTable= zeros(0,numel(myVarnames1));
 multipleVariablesRow1 = zeros(0, numel(myVarnames1));
@@ -52,6 +52,12 @@ current_injected = current_injected1; %stimulus current
         x_axis_actual = sampleunits_to_ms(si, x_axis_samples);
         %threshold minimum
 
+        figure(1)
+        plot(x_axis_actual, data, 'r')
+        xlabel("time (ms)")
+        ylabel("mv")
+
+       
         
         
             alloweddeviation = 40;%if 30, anything within 30mV of resting potential (first value in trace) is deemed as noise
@@ -107,27 +113,23 @@ current_injected = current_injected1; %stimulus current
                     end
 
 
-                    thresh_pt_2_candidates = threshold_crossings( rangetolook, threshold_value );
-                    % if numel(thresh_pt_2_candidates) >=1
-                    %     threshpt2 = maintroughloc+ thresh_pt_2_candidates(1); %time where the first AP ends
-                    %     fallingDuration = threshpt2-mainpeakloc;
-                    % else
-                    % 
-                    %     fallingDuration = maxlength_pulse - mainpeakloc;
-                    % end
-
-
-                    %falling duration - method2 - find where slope sign changes
-                
                     f=smoothdata(rangetolook, "gaussian"); %smooth out noise with gaussian filter after trough pt
-                    negative_slope = find(diff(f)<0);
+                    
+                    figure(2)
+                    plot(diff(f))
+                    
+                    negative_slope = find(diff(f)<=0);
                     
                     if(numel(negative_slope)>=1)
 
                         slopedecreasept = maintroughloc + negative_slope(1);
 
                     else
-                        slopedecreasept = maxlength_pulse;
+                        if(numel(pks_in_trace) == 1)
+                            slopedecreasept = maxlength_pulse;
+                        else
+                             slopedecreasept = pks_in_trace(2);
+                        end
                     end
                     fallingDuration = slopedecreasept- mainpeakloc;
                     
@@ -139,9 +141,6 @@ current_injected = current_injected1; %stimulus current
                        
                    
             
-                    figure;
-                plot(test_spike)
-            
             
                %analyze the first spike in cell
                 total_count_Aps = numel(pks_in_trace); %count total no. of APs in first sweep where AP is detected
@@ -150,7 +149,8 @@ current_injected = current_injected1; %stimulus current
                 freq_in_hz = total_count_Aps/totalduration_sec; %frequency of the sweep with the first AP detected in cell.
             
                 amplitude = max(test_spike) - test_spike(1);
-                AHP_amp_real = min(test_spike) - test_spike(1);
+                %AHP_amp_real = min(test_spike) - test_spike(1);
+                AHP_amp_real = min(test_spike) - test_spike(end); %AHP amp is measured from the pt where AHP stops repolarizing
                 AHP_amp = abs(AHP_amp_real);
 
                 max_voltage = data(mainpeakloc);
@@ -159,13 +159,10 @@ current_injected = current_injected1; %stimulus current
                 maxpoint = find(test_spike == max(test_spike));
                 maxpoint = maxpoint(1);
             
-                % Find the minimum value in the specified portion
-                minValue = min(test_spike(maxpoint:end));
-            
-                % Find the index of the minimum value in the specified portion
-                minpoint = find(test_spike(maxpoint:end) == minValue, 1, 'first') + maxpoint - 1;
-            
-                minpoint_val = test_spike(minpoint);
+                [minpoint_val, minpoint] = min(test_spike);
+
+                AHP_repolarizationtime = sampleunits_to_ms(si, numel(test_spike) - minpoint); %rise time for AHP (repolarization)
+
             
                 
             
@@ -201,6 +198,11 @@ current_injected = current_injected1; %stimulus current
                 [~, ind_90_dec] = min(abs(vq_maxToMin-AHP_90));
                 [~, ind_70_dec] = min(abs(vq_maxToMin-AHP_70));
                 [~, ind_50_dec] = min(abs(vq_maxToMin-AHP_50));  
+                
+
+                
+
+
                 % interpolation of y values between 1 to max pt
                 x3 = 1:maxpoint;
                 xq_1tomax= x3(1):0.2:x3(end);
@@ -234,7 +236,12 @@ current_injected = current_injected1; %stimulus current
                dec90_30w = 0.2 * sampleunits_to_ms(si,  AHP_decay_90to30);
                dec10_90w = 0.2 * sampleunits_to_ms(si,  AHP_decay_10to90);
                         
-             
+             % NOT WORKING: ask why
+               % figure(5)
+               %  plot(test_spike)
+               %  hold on
+               %  plot(numel(vq_maxToMin)+ind_10_rise, test_spike(numel(vq_maxToMin)+ind_10_rise), 'ro')
+
                         
                 %%%%%%%% AP properties %%%%%%%%%%%%%%%%%%%%%%%%%%%%
                 interp_hw_AP = numel(vq_1tomax)+ AP_50_dec - AP_50_rise;
@@ -256,7 +263,7 @@ current_injected = current_injected1; %stimulus current
             
                 %%% put into table %%%
                 
-               multipleVariablesRow1= [filename, current_injected(a), freq_in_hz, spikeloc(1), threshold_voltage(1), amplitude(1), AHP_amp_real(1), minp(1),minpInTrace(1), maxpointdata(1), maxpointInTrace(1), interp_hw_AP_time, AHP_30(1), AHP_50(1), AHP_70(1), AHP_90(1), interp_hw_AHP_time, dec10w(1), dec30w(1), dec70w(1), dec90w(1), dec90_30w(1), dec10_90w(1)];
+               multipleVariablesRow1= [filename, current_injected(a), freq_in_hz, spikeloc(1), threshold_voltage(1), amplitude(1), AHP_amp_real(1), minp(1),minpInTrace(1), maxpointdata(1), maxpointInTrace(1), interp_hw_AP_time, AHP_30(1), AHP_50(1), AHP_70(1), AHP_90(1), interp_hw_AHP_time, dec10w(1), dec30w(1), dec70w(1), dec90w(1), dec90_30w(1), dec10_90w(1), sampleunits_to_ms(si, risingDuration), sampleunits_to_ms(si, fallingDuration), AHP_repolarizationtime];
                    
                M1= array2table(multipleVariablesRow1, 'VariableNames', myVarnames1);
                %T1 = [T1; M1];
