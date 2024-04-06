@@ -8,7 +8,7 @@ function M1 = analyzeSingleEvokedApr3(filename1, current_injected1)
 
 % Created by: Sayaka (Saya) Minegishi
 % minegishis@brandeis.edu
-% Feb 23 2024
+% Apr 5 2024
 
 filename = filename1; %specify file to examine
 
@@ -82,24 +82,61 @@ current_injected = current_injected1; %stimulus current
               
                 
                 pks_in_trace = get_spikelocations(data,dV_thresh); %get AP spike times in trace
+                [~,troughlocations] = findpeaks(-data, 'MinPeakProminence',5); %get all trough locations
                 
                 if(numel(pks_in_trace)>=1)
                     
                     mainpeakloc = pks_in_trace(1);
+                    maintroughloc = troughlocations(1);
+
                     
+
                     threshold_voltage = data(all_dV_filtered(1)); 
                     %rising and falling durations of an AP
                     risingDuration = mainpeakloc - threshold_pt; %in sample units
                     
                     maxlength_pulse = 5248; %end pt of current pulse. obtained by visual inspection.
                     %find falling duration.
-                    if(numel(pks_in_trace)>1)
-                        fallingDuration = pks_in_trace(2)-mainpeakloc-risingDuration; %in sample units
+                  
+
+                    if numel(pks_in_trace ==1)
+                        rangetolook = data(maintroughloc:maxlength_pulse);
+                        
                     else
-                        fallingDuration = maxlength_pulse - mainpeakloc;
+                        rangetolook = data(maintroughloc:pks_in_trace(2));
                     end
 
-        
+
+                    thresh_pt_2_candidates = threshold_crossings( rangetolook, threshold_value );
+                    % if numel(thresh_pt_2_candidates) >=1
+                    %     threshpt2 = maintroughloc+ thresh_pt_2_candidates(1); %time where the first AP ends
+                    %     fallingDuration = threshpt2-mainpeakloc;
+                    % else
+                    % 
+                    %     fallingDuration = maxlength_pulse - mainpeakloc;
+                    % end
+
+
+                    %falling duration - method2 - find where slope sign changes
+                
+                    f=smoothdata(rangetolook, "gaussian"); %smooth out noise with gaussian filter after trough pt
+                    negative_slope = find(diff(f)<0);
+                    
+                    if(numel(negative_slope)>=1)
+
+                        slopedecreasept = maintroughloc + negative_slope(1);
+
+                    else
+                        if(numel(pks_in_trace) == 1)
+                            slopedecreasept = maxlength_pulse;
+                        else
+                             slopedecreasept = pks_in_trace(2);
+                        end
+                    end
+                    fallingDuration = slopedecreasept- mainpeakloc;
+                    
+
+                    
 
                     [test_spike,starttime,endtime] = extract_waveform3(risingDuration,fallingDuration, mainpeakloc, data); %in sample units
         

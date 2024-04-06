@@ -18,7 +18,7 @@ list = dir('*.abf');%This script finds the firing properties of the FIRST AP eve
 
 % Created by: Sayaka (Saya) Minegishi
 % minegishis@brandeis.edu
-% Feb 23 2024
+% Apr 3 2024
 
  %start loading files
 close all
