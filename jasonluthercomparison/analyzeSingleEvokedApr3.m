@@ -8,7 +8,7 @@ function M1 = analyzeSingleEvokedApr3(filename1, current_injected1)
 
 % Created by: Sayaka (Saya) Minegishi
 % minegishis@brandeis.edu
-% Apr 3 2024
+% Apr 5 2024
 
 filename = filename1; %specify file to examine
 
@@ -89,6 +89,8 @@ current_injected = current_injected1; %stimulus current
                     mainpeakloc = pks_in_trace(1);
                     maintroughloc = troughlocations(1);
 
+                    
+
                     threshold_voltage = data(all_dV_filtered(1)); 
                     %rising and falling durations of an AP
                     risingDuration = mainpeakloc - threshold_pt; %in sample units
@@ -97,12 +99,15 @@ current_injected = current_injected1; %stimulus current
                     %find falling duration.
                   
 
+                    if numel(pks_in_trace ==1)
+                        rangetolook = data(maintroughloc:maxlength_pulse);
+                        
+                    else
+                        rangetolook = data(maintroughloc:pks_in_trace(2));
+                    end
 
-                    rangetolook = data(maintroughloc:maxlength_pulse);
+
                     thresh_pt_2_candidates = threshold_crossings( rangetolook, threshold_value );
-
-
-
                     % if numel(thresh_pt_2_candidates) >=1
                     %     threshpt2 = maintroughloc+ thresh_pt_2_candidates(1); %time where the first AP ends
                     %     fallingDuration = threshpt2-mainpeakloc;
@@ -122,7 +127,11 @@ current_injected = current_injected1; %stimulus current
                         slopedecreasept = maintroughloc + negative_slope(1);
 
                     else
-                        slopedecreasept = maxlength_pulse;
+                        if(numel(pks_in_trace) == 1)
+                            slopedecreasept = maxlength_pulse;
+                        else
+                             slopedecreasept = pks_in_trace(2);
+                        end
                     end
                     fallingDuration = slopedecreasept- mainpeakloc;
                     
