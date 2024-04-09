@@ -13,6 +13,9 @@ Detects bursts and singlet AP spikes from either a single abf file or a batch of
 ### For analysis of Evoked Recordings:
  • **Apr8_batchEVOKED.m (relies on analyzeSingleEvokedApr8.m)** - performs batch analysis of all ABF files in the folder. Analyzes the properties of the first AP detected in each cell. Access from Apr 8 scripts folder.
 
+**instructions for analysis of evoked recordings between strains are stored as a pdf in the Apr8 scripts folder.**
+
+
 Scripts were checked for accuracy by visual inspection and by comparing with the results from pclamp's analysis tool when applicable. 
 
 For any questions or concerns, please feel free to contact me at minegishis@brandeis.edu
