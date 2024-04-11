@@ -91,7 +91,7 @@ for a= 1: totalsweeps %analyze the sweep that invokes the first two APs in cell.
             restingpotential = data(1); %resting potential.
 
 
-            pks_in_trace = get_spikelocations(data,dV_thresh); %get AP spike times in trace
+            pks_in_trace = get_spikelocations(data,threshold_value); %get AP spike times in trace
             [~,troughlocations] = findpeaks(-data, 'MinPeakProminence',5); %get all trough locations
             maxlength_pulse = 5248; %end pt of current pulse. obtained by visual inspection.
             threshold_voltage = data(all_dV_filtered(1));

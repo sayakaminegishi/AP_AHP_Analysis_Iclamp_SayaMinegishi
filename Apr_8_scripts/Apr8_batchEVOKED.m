@@ -30,7 +30,7 @@ filesNotWorking = []; %list of files with errors
 list = dir('*.abf');
 file_names = {list.name}; %list of all abf file names in the directory 
 
-filenameExcelDoc = strcat('apr8_shrn_newnew.xlsx');
+filenameExcelDoc = strcat(['apr8_WKYnewnew.xlsx']);
 myVarnames1= {'cell_name', 'current_injected(pA)','frequency(Hz)','spike_location(ms)', 'threshold(mV)', 'amplitude(mV)', 'AHP_amplitude(mV)', 'trough value (mV)', 'trough location(ms)', 'peak value(mV)', 'peak location(ms)', 'half_width(ms)', 'AHP_30_val(mV)', 'AHP_50_val(mV)', 'AHP_70_val(mV)', 'AHP_90_val(mV)', 'half_width_AHP(ms)', 'AHP_width_10to10%(ms)', 'AHP_width_30to30%(ms)', 'AHP_width_70to70%(ms)', 'AHP_width_90to90%(ms)','AHP_width_90to30%(ms)', 'AHP_width_10to90%(ms)','risetime(ms)', 'decaytime(ms)' };
 
 multipleVariablesTable= zeros(0,numel(myVarnames1));
