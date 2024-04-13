@@ -70,18 +70,24 @@ for n=1:size(file_names,2)
   filename = string(file_names{n});
   disp([int2str(n) '. Working on: ' filename{:}])
    
-   
-   M1= analyzeSingleEvokedApr8(filename, current_injected,last_only);
-   if isempty(M1),
-    fprintf('Invalid data in iteration %s, skipped.\n', filename);
-    filesNotWorking = [filesNotWorking;filename];
-   else,
-       T1 = [T1; M1];
+   try
+       M1= analyzeSingleEvokedApr8(filename, current_injected,last_only);
+       if isempty(M1),
+        fprintf('Invalid data in iteration %s, skipped.\n', filename);
+        filesNotWorking = [filesNotWorking;filename];
+       else,
+           T1 = [T1; M1];
+       end
+       display(T1)
+   catch
+       %skip file if the file is invalid
+       fprintf("invalid data in %s", filename)
+       filesNotWorking = [filesNotWorking;filename];
    end
+
    
 
 end
-display(T1)
 
 display(filesNotWorking)
 filesthatworkedcount = size(file_names,2) - size(filesNotWorking, 1);

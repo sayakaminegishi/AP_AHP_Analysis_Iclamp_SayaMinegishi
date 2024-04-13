@@ -159,6 +159,8 @@ for a= loop_vector %analyze the sweep that invokes the first two APs in cell. ch
         
                     amplitude = max(test_spike) - test_spike(1);
                     AHP_amp_real = min(test_spike) - test_spike(1); %min to threshold
+                    
+                    %AHP_amp_real = min(test_spike) - test_spike(end);
                     % AHP_amp_real = min(test_spike) - test_spike(end); %AHP amp is measured from the pt where AHP stops repolarizing
                     AHP_amp = abs(AHP_amp_real);
         
