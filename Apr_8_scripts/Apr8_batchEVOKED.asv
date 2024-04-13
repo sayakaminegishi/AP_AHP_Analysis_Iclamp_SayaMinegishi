@@ -5,8 +5,7 @@ function Apr8_batchEVOKED(datadir,outputfile, last_only)
 %from each cell in the directory, and exports the summary table as an excel
 %file.
 
-% Created by: Sayaka (Saya) Minegishi with support from Dr. Stephen Van
-% Hooser
+% Created by: Sayaka (Saya) Minegishi
 % minegishis@brandeis.edu
 % Apr 12 2024
 
@@ -38,9 +37,9 @@ end;
  %start loading files
 close all
 
-analysis_dir = fullfile(userpath, filesep, 'Projects', filesep, 'AP_AHP_Analysis_Iclamp_SayaMinegishi', filesep, 'analyses');
+analysis_dir = fullfile(userpath, filesep, 'Projects', filesep, 'AP_ICLAMP_PROJ', filesep, 'analyses');
 
-dirname = fullfile(userpath,filesep,  'Projects', filesep,'AP_AHP_Analysis_Iclamp_SayaMinegishi', filesep, 'data', filesep, datadir);
+dirname = fullfile(userpath,filesep,  'Projects', filesep, 'AP_ICLAMP_PROJ', filesep,'AP_AHP_Analysis_Iclamp_SayaMinegishi', filesep, 'data', filesep, datadir);
 
 
 disp(['Now working on directory ' dirname])
@@ -69,7 +68,6 @@ for n=1:size(file_names,2)
     
   filename = string(file_names{n});
   disp([int2str(n) '. Working on: ' filename{:}])
-   
    
    M1= analyzeSingleEvokedApr8(filename, current_injected,last_only);
    if isempty(M1),
