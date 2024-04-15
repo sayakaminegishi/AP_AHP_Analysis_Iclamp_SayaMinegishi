@@ -103,3 +103,4 @@ display("AHP amp = " + mean(double(T1.("AHP_amplitude(mV)"))))
 display("half width ahp = " + mean(double(T1.("half_width_AHP(ms)"))))
 display("ahpwidth 90-30% = " + mean(double(T1.("AHP_width_90to30%(ms)"))))
 display("risetime AP = " + mean(double(T1.("risetime(ms)"))));
+display("threshold = " + mean(double(T1.("threshold(mV)"))));
