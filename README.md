@@ -9,7 +9,8 @@ Detects bursts and singlet AP spikes from either a single abf file or a batch of
 • **“CMA_batch_analysisFeb17.m”** –click on Run button to analyze all abf files in the same directory where this script & its function scripts are stored. Gives results for each file in tables.
 
  • **“feb17_single.m”** – run analysis on an abf file of interest. Specify its file name after “filename1=”. Then hit Run.
- 
+
+ Note: comment out the line with detrend().
 ### For analysis of Evoked Recordings:
 
 **instructions for analysis of evoked recordings between strains are stored as a pdf in the Apr8 scripts folder. Also available here:** https://docs.google.com/document/d/1Dt-N9spfyecrz-NfVQ8llY4SRXOmuahhmHoIWT_Pxhw/edit?usp=sharing 
