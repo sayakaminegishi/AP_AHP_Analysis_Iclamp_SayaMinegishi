@@ -66,13 +66,6 @@ dataold = data;
 %data = detrend(data, 1) + data(1); %Correct baseline - detrend shifts baseline to 0
 
 
-figure(5)
-plot(dataold)
-hold on
-plot(data)
-legend('dataold', 'datanew')
-hold off
-
 
 x_axis_samples = 1:size(data,1);
 x_axis_actual = sampleunits_to_ms(si, x_axis_samples);
@@ -240,10 +233,7 @@ else
     [ISI_brelated_thresh_idx,~] = find_nearest_value(ISI_brelated_CMA, CMA_list);
     ISI_brelated_thresh = Ibins_centered(ISI_brelated_thresh_idx); %find the ISI corresponding to this nearest value of CMA
     
-    %display(ISI_interburst_thresh)
-    %display(ISI_brelated_thresh)
-    
-    
+   
     
     %%%%%%%%%%%%%% 
     % burst times and singlet AP times (measured as location of peak)
@@ -297,15 +287,16 @@ else
     numbursts = size(burstTimesMatrix, 1); % no. of rows in burstTimesMatrix
     
     %find average burst duration
-    burstdurationlist = zeros(numbursts); %array to store each burst duration
-    
-    for(i = 1:numbursts)
+    burstdurationlist = zeros(numbursts,1); %array to store each burst duration
+    display("btm= " + burstTimesMatrix)
+    for i = 1:numbursts
         dur = burstTimesMatrix(i, 2) - burstTimesMatrix(i, 1); %duration of this particular burst
         burstdurationlist(i) = dur;
     end
-    
+    display("bdlist =" + burstdurationlist)
     avg_burst_duration = mean(burstdurationlist); %mean burst duration in ms (DOUBLE CHECK)
-    avg_burst_duration = double(avg_burst_duration(:,1));
+    display("avg bd= " + avg_burst_duration)
+   %avg_burst_duration = double(avg_burst_duration(:,1));
     count_singletAPs = size(singletTimesMatrix, 1);
     freq_burst_in_Hz = numbursts(1)/totalduration_sec;
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
