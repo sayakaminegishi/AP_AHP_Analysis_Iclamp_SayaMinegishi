@@ -18,9 +18,15 @@ summaryTable = array2table(sumtable, 'VariableNames', headers);
 
 
 %%%% load data from excel spreadsheets
+<<<<<<< HEAD
 
 SHRTable = readtable("/Users/sayakaminegishi/MATLAB/Projects/AP_AHP_Analysis_Iclamp_SayaMinegishi/Analyses/SHRevoked_apr15ls.xlsx","TextType","string");
 WKYTable = readtable("/Users/sayakaminegishi/MATLAB/Projects/AP_AHP_Analysis_Iclamp_SayaMinegishi/Analyses/WKYevoked_apr15ls.xlsx","TextType","string");
+=======
+%todo: change the below formatting to be universal using filesep
+SHRTable = readtable("/Users/sayakaminegishi/MATLAB/Projects/AP_AHP_Analysis_Iclamp_SayaMinegishi/Analysis&Tests/SHRevoked_apr12.xlsx","TextType","string");
+WKYTable = readtable("/Users/sayakaminegishi/MATLAB/Projects/AP_AHP_Analysis_Iclamp_SayaMinegishi/Analysis&Tests/WKYevoked_apr12.xlsx","TextType","string");
+>>>>>>> 02514955f0697ce942dcce5f275a947161d57074
 
 strain = ["WKYN", "SHRN"];
 
@@ -237,6 +243,10 @@ numcells_eachgroup = ("Tested with " + n_SHR + " SHR cells and " + n_WKY + " WKY
 
 display(numcells_eachgroup);
 
+<<<<<<< HEAD
 filenameExcelDoc = "apr15lastsw.xlsx"
+=======
+filenameExcelDoc = "summary_table_ttests_apr12.xlsx"
+>>>>>>> 02514955f0697ce942dcce5f275a947161d57074
 writetable(summaryTable, filenameExcelDoc, 'Sheet', 1); %export summary table to excel
 writematrix(numcells_eachgroup, filenameExcelDoc, 'Sheet' ,2)
