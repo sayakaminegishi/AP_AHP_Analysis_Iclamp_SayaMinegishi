@@ -3,18 +3,18 @@ Detects bursts and singlet AP spikes from either a single abf file or a batch of
 
 ## Description of each script that you can run
 
- NB: store the abf files of interest in the SAME DIRECTORY (same folder) as the rest of the scripts! Sample files to test are in the zip folder (you have to open it and copy-paste the files into your working folder).
+ NB: store the abf files of interest in separate folders in the 'data' folder. 
+ All the function scripts required are in the Apr_8_scripts folder
+
+**instructions for analysis of evoked and spontaneous recordings between strains are available here:** https://docs.google.com/document/d/1Dt-N9spfyecrz-NfVQ8llY4SRXOmuahhmHoIWT_Pxhw/edit?usp=sharing 
 
 ### For analysis of Spontaneous Recordings:
-Download spontaneous_analysis_apr22 file.
+Run CMA_batch_analysisFeb17(), where the first argument is the folder name of where your spontaneous files of interest are stored in the ‘data’ directory, and the second argument is the name of the output excel table.
 
-• **“CMA_batch_analysisFeb17.m”** –click on Run button to analyze all abf files in the same directory where this script & its function scripts are stored. Gives results for each file in tables.
-
- • **“feb17_single.m”** – run analysis on an abf file of interest. Specify its file name after “filename1=”. Then hit Run.
+• “CMA_batch_analysisFeb17.m” - function to analyze all abf files in the specified data directory. Gives results for each file in tables.
 
 ### For analysis of Evoked Recordings:
-
-**instructions for analysis of evoked recordings between strains are stored as a pdf in the Apr8 scripts folder. Also available here:** https://docs.google.com/document/d/1Dt-N9spfyecrz-NfVQ8llY4SRXOmuahhmHoIWT_Pxhw/edit?usp=sharing 
+see the Google doc. 
 
 Scripts were checked for accuracy by visual inspection and by comparing with the results from pclamp's analysis tool when applicable. 
 
