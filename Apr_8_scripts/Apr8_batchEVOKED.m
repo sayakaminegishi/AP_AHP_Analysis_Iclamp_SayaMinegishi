@@ -5,9 +5,10 @@ function Apr8_batchEVOKED(datadir,outputfile, last_only)
 %from each cell in the directory, and exports the summary table as an excel
 %file.
 
-% Created by: Sayaka (Saya) Minegishi
+% Created by: Sayaka (Saya) Minegishi with support from Dr. Stephen Van
+% Hooser
 % minegishis@brandeis.edu
-% Apr 8 2024
+% Apr 12 2024
 
 if nargin<3,
     last_only = 0;
@@ -37,9 +38,10 @@ end;
  %start loading files
 close all
 
-analysis_dir = fullfile(userpath, filesep, 'AP_AHP_Analysis_Iclamp_SayaMinegishi', filesep, 'analyses');
+analysis_dir = fullfile(userpath, filesep, 'Projects', filesep, 'AP_AHP_Analysis_Iclamp_SayaMinegishi', filesep, 'analyses');
 
-dirname = fullfile(userpath,filesep,'AP_AHP_Analysis_Iclamp_SayaMinegishi', filesep, 'data', filesep, datadir);
+dirname = fullfile(userpath,filesep,  'Projects', filesep,'AP_AHP_Analysis_Iclamp_SayaMinegishi', filesep, 'data', filesep, datadir);
+
 
 disp(['Now working on directory ' dirname])
 
@@ -68,17 +70,24 @@ for n=1:size(file_names,2)
   filename = string(file_names{n});
   disp([int2str(n) '. Working on: ' filename{:}])
    
-   M1= analyzeSingleEvokedApr8(filename, current_injected,last_only);
-   if isempty(M1),
-    fprintf('Invalid data in iteration %s, skipped.\n', filename);
-    filesNotWorking = [filesNotWorking;filename];
-   else,
-       T1 = [T1; M1];
+   try
+       M1= analyzeSingleEvokedApr8(filename, current_injected,last_only);
+       if isempty(M1),
+        fprintf('Invalid data in iteration %s, skipped.\n', filename);
+        filesNotWorking = [filesNotWorking;filename];
+       else,
+           T1 = [T1; M1];
+       end
+       display(T1)
+   catch
+       %skip file if the file is invalid
+       fprintf("invalid data in %s", filename)
+       filesNotWorking = [filesNotWorking;filename];
    end
+
    
 
 end
-display(T1)
 
 display(filesNotWorking)
 filesthatworkedcount = size(file_names,2) - size(filesNotWorking, 1);
@@ -94,3 +103,4 @@ display("AHP amp = " + mean(double(T1.("AHP_amplitude(mV)"))))
 display("half width ahp = " + mean(double(T1.("half_width_AHP(ms)"))))
 display("ahpwidth 90-30% = " + mean(double(T1.("AHP_width_90to30%(ms)"))))
 display("risetime AP = " + mean(double(T1.("risetime(ms)"))));
+display("threshold = " + mean(double(T1.("threshold(mV)"))));

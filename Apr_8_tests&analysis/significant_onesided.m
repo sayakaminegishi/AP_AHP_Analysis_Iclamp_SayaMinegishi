@@ -19,8 +19,8 @@ summaryTable = array2table(sumtable, 'VariableNames', headers);
 
 %%%% load data from excel spreadsheets
 
-SHRTable = readtable("/Users/sayakaminegishi/Documents/AP analysis packages Saya M/ANALYSES_March 2024/apr8/apr8_shrnlastsw.xlsx","TextType","string");
-WKYTable = readtable("/Users/sayakaminegishi/Documents/AP analysis packages Saya M/ANALYSES_March 2024/apr8/apr8_wkylastsw.xlsx","TextType","string");
+SHRTable = readtable("/Users/sayakaminegishi/MATLAB/Projects/AP_AHP_Analysis_Iclamp_SayaMinegishi/Analysis&Tests/SHRevoked_apr15.xlsx","TextType","string");
+WKYTable = readtable("/Users/sayakaminegishi/MATLAB/Projects/AP_AHP_Analysis_Iclamp_SayaMinegishi/Analysis&Tests/WKYevoked_apr15.xlsx","TextType","string");
 
 strain = ["WKYN", "SHRN"];
 
@@ -36,7 +36,7 @@ wky_thresh = str2double(WKYTable.frequency_Hz_);
 
 % Interpret the results
 if h == 1
-    str = 'The mean current_injected_pA_ for WKYN is greater than the mean for SHRN.';
+    str = 'The mean firing frequency for WKYN is greater than the mean for SHRN.';
 else
    str = 'There is no significant difference in the mean current_injected_pA_ between the two strains.';
 end

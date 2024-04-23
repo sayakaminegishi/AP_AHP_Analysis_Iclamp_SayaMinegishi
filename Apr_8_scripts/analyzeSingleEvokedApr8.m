@@ -6,7 +6,8 @@ function M1 = analyzeSingleEvokedApr8(filename1, current_injected1, last_only)
 %filename1= filename
 % current_injected1 = stimulus current in matrix
 
-% Created by: Sayaka (Saya) Minegishi
+% Created by: Sayaka (Saya) Minegishi with support from Dr. Stephen Van
+% Hooser
 % minegishis@brandeis.edu
 % Apr 11 2024
 
@@ -158,16 +159,21 @@ for a= loop_vector %analyze the sweep that invokes the first two APs in cell. ch
         
                     amplitude = max(test_spike) - test_spike(1);
                     AHP_amp_real = min(test_spike) - test_spike(1); %min to threshold
+                    
+                    %AHP_amp_real = min(test_spike) - test_spike(end);
                     % AHP_amp_real = min(test_spike) - test_spike(end); %AHP amp is measured from the pt where AHP stops repolarizing
                     AHP_amp = abs(AHP_amp_real);
         
                     max_voltage = data(mainpeakloc);
         
+                    [minpoint_val, minpoint] = min(test_spike);
         
                     maxpoint = find(test_spike == max(test_spike));
                     maxpoint = maxpoint(1);
+                    
+
         
-                    [minpoint_val, minpoint] = min(test_spike);
+                    
         
                     AHP_repolarizationtime = sampleunits_to_ms(si, numel(test_spike) - minpoint); %rise time for AHP (repolarization)
         
@@ -184,98 +190,107 @@ for a= loop_vector %analyze the sweep that invokes the first two APs in cell. ch
                     AHP_50 = min(test_spike) + (AHP_amp * 0.5); %100-70
                     % AP properties
                     AP_50 = max(test_spike) - (amplitude * 0.5); %50% AP
+                    
                     % %%%%%%%%%%%%%FINDING fractions of AP and AHP widths WITH interpolation
                     % % Perform interpolation between max to min pt of test_spike
-                    x2 = [maxpoint:minpoint];
-                    xq_maxToMin = x2(1):0.2:x2(end);
-                    vq_maxToMin = interp1(x2, test_spike(x2), xq_maxToMin); %interpolated values of y between x = min:end
-                    %  % Create the x-values (assuming they are indices in this case)
-                    x = [minpoint:numel(test_spike)];
-                    % % Perform interpolation to get more detailed graph
-                    xq_minToEnd = x(1):0.2:x(end);
-                    vq_minToEnd = interp1(x, test_spike(x), xq_minToEnd); %interpolated values of y between x = min:end
-        
-                    [~, ind_10_rise] = min(abs(vq_minToEnd-AHP_10)); %find the pt in the range (minpoint:end) where distance between value of test_spike at that point and AHP_10 value is the lowest. this finds the closest point to AHP_10.
-                    [~, ind_30_rise] = min(abs(vq_minToEnd-AHP_30));
-                    [~, ind_90_rise] = min(abs(vq_minToEnd-AHP_90));
-                    [~, ind_70_rise] = min(abs(vq_minToEnd-AHP_70));
-                    [~, ind_50_rise] = min(abs(vq_minToEnd-AHP_50));
-        
-                    [~, ind_10_dec] = min(abs(vq_maxToMin-AHP_10));
-                    [~, ind_30_dec] = min(abs(vq_maxToMin-AHP_30));
-                    [~, ind_90_dec] = min(abs(vq_maxToMin-AHP_90));
-                    [~, ind_70_dec] = min(abs(vq_maxToMin-AHP_70));
-                    [~, ind_50_dec] = min(abs(vq_maxToMin-AHP_50));
-        
-        
-        
-        
-        
-                    % interpolation of y values between 1 to max pt
-                    x3 = 1:maxpoint;
-                    xq_1tomax= x3(1):0.2:x3(end);
-                    vq_1tomax = interp1(x3, test_spike(x3), xq_1tomax);
-                    % variables for finding half width of AP
-                    [~, AP_50_rise] = min(abs(vq_1tomax-AP_50));
-                    [~, AP_50_dec] = min(abs(vq_maxToMin-AP_50));
-        
-        
-                    %FIXED:
-                    interp_hw_AHP = numel(vq_maxToMin)+ind_50_rise - ind_50_dec;
-                    interp_hw_AHP_time = 0.2 * sampleunits_to_ms(si,  interp_hw_AHP);
-        
-                    %adjusted accordingly (in sample units):
-                    AHP_decay_10to10 = numel(vq_maxToMin)+ind_10_rise - ind_10_dec; %AHP 10% to 10% width
-                    AHP_decay_30to30 = numel(vq_maxToMin)+ind_30_rise - ind_30_dec;  %calculate AHP 30-30% time
-                    AHP_decay_70to70 = numel(vq_maxToMin)+ind_70_rise - ind_70_dec; %calculate AHP 70-70% width
-                    AHP_decay_90to90 = numel(vq_maxToMin)+ind_90_rise - ind_90_dec;
-        
-                    %90- 30%
-                    AHP_decay_90to30 = numel(vq_maxToMin)+ ind_30_rise-ind_90_rise;
-                    AHP_decay_10to90 = numel(vq_maxToMin)+ind_10_rise - ind_90_rise;
-        
-                    %convert from sampleunits to ms:
-                    % we're changing the sampling units to be from every 100us to be every 20us (in the interpolated space with step 0.2 sample units).
-                    dec10w = 0.2 * sampleunits_to_ms(si,  AHP_decay_10to10);
-                    dec30w = 0.2 * sampleunits_to_ms(si,  AHP_decay_30to30);
-                    dec70w =0.2 * sampleunits_to_ms(si,  AHP_decay_70to70);
-                    dec90w =0.2 * sampleunits_to_ms(si,  AHP_decay_90to90);
-        
-                    dec90_30w = 0.2 * sampleunits_to_ms(si,  AHP_decay_90to30);
-                    dec10_90w = 0.2 * sampleunits_to_ms(si,  AHP_decay_10to90);
-        
-        
-                    %%%%%%%% AP properties %%%%%%%%%%%%%%%%%%%%%%%%%%%%
-                    interp_hw_AP = numel(vq_1tomax)+ AP_50_dec - AP_50_rise;
-                    interp_hw_AP_time = 0.2 * sampleunits_to_ms(si,  interp_hw_AP);
-        
-                    %minpoint and maxpoints, in terms of whole data
-        
-                    minpoint_in_trace = find(test_spike == test_spike(minpoint) ) + starttime;
-        
-                    maxpoint_in_trace = find(test_spike == test_spike(maxpoint) ) + starttime;
-        
-        
-                    spikeloc = sampleunits_to_ms(si,mainpeakloc); % %
-                    minp = data(minpoint_in_trace); % %
-                    minpInTrace =sampleunits_to_ms(si, minpoint_in_trace(1));
-                    maxpointdata = data(maxpoint_in_trace); % %
-                    maxpointInTrace =sampleunits_to_ms(si,maxpoint_in_trace(1)); % %
-        
-        
-                    %%% put into table %%%
-        
-                    multipleVariablesRow1= [filename, current_injected(a), freq_in_hz, spikeloc(1), threshold_voltage(1), amplitude(1), AHP_amp_real(1), minp(1),minpInTrace(1), maxpointdata(1), maxpointInTrace(1), interp_hw_AP_time, AHP_30(1), AHP_50(1), AHP_70(1), AHP_90(1), interp_hw_AHP_time, dec10w(1), dec30w(1), dec70w(1), dec90w(1), dec90_30w(1), dec10_90w(1), sampleunits_to_ms(si, risingDuration), sampleunits_to_ms(si, fallingDuration)];
-        
-                    M1= array2table(multipleVariablesRow1, 'VariableNames', myVarnames1);
+                    if(maxpoint >= minpoint)
+                        apFoundInCell = 0;
+                    else
+                        x2 = [maxpoint:minpoint];
     
+                        xq_maxToMin = x2(1):0.2:x2(end);
+    
+                        vq_maxToMin = interp1(x2, test_spike(x2), xq_maxToMin); %interpolated values of y between x = min:end
+                        
+                        %  % Create the x-values (assuming they are indices in this case)
+                        x = [minpoint:numel(test_spike)];
+                        
+                        % % Perform interpolation to get more detailed graph
+                        xq_minToEnd = x(1):0.2:x(end);
+                        vq_minToEnd = interp1(x, test_spike(x), xq_minToEnd); %interpolated values of y between x = min:end
+            
+                        [~, ind_10_rise] = min(abs(vq_minToEnd-AHP_10)); %find the pt in the range (minpoint:end) where distance between value of test_spike at that point and AHP_10 value is the lowest. this finds the closest point to AHP_10.
+                        [~, ind_30_rise] = min(abs(vq_minToEnd-AHP_30));
+                        [~, ind_90_rise] = min(abs(vq_minToEnd-AHP_90));
+                        [~, ind_70_rise] = min(abs(vq_minToEnd-AHP_70));
+                        [~, ind_50_rise] = min(abs(vq_minToEnd-AHP_50));
+            
+                        [~, ind_10_dec] = min(abs(vq_maxToMin-AHP_10));
+                        [~, ind_30_dec] = min(abs(vq_maxToMin-AHP_30));
+                        [~, ind_90_dec] = min(abs(vq_maxToMin-AHP_90));
+                        [~, ind_70_dec] = min(abs(vq_maxToMin-AHP_70));
+                        [~, ind_50_dec] = min(abs(vq_maxToMin-AHP_50));
+            
+            
+            
+            
+            
+                        % interpolation of y values between 1 to max pt
+                        x3 = 1:maxpoint;
+                        xq_1tomax= x3(1):0.2:x3(end);
+                        vq_1tomax = interp1(x3, test_spike(x3), xq_1tomax);
+                        % variables for finding half width of AP
+                        [~, AP_50_rise] = min(abs(vq_1tomax-AP_50));
+                        [~, AP_50_dec] = min(abs(vq_maxToMin-AP_50));
+            
+            
+                        %FIXED:
+                        interp_hw_AHP = numel(vq_maxToMin)+ind_50_rise - ind_50_dec;
+                        interp_hw_AHP_time = 0.2 * sampleunits_to_ms(si,  interp_hw_AHP);
+            
+                        %adjusted accordingly (in sample units):
+                        AHP_decay_10to10 = numel(vq_maxToMin)+ind_10_rise - ind_10_dec; %AHP 10% to 10% width
+                        AHP_decay_30to30 = numel(vq_maxToMin)+ind_30_rise - ind_30_dec;  %calculate AHP 30-30% time
+                        AHP_decay_70to70 = numel(vq_maxToMin)+ind_70_rise - ind_70_dec; %calculate AHP 70-70% width
+                        AHP_decay_90to90 = numel(vq_maxToMin)+ind_90_rise - ind_90_dec;
+            
+                        %90- 30%
+                        AHP_decay_90to30 = numel(vq_maxToMin)+ ind_30_rise-ind_90_rise;
+                        AHP_decay_10to90 = numel(vq_maxToMin)+ind_10_rise - ind_90_rise;
+            
+                        %convert from sampleunits to ms:
+                        % we're changing the sampling units to be from every 100us to be every 20us (in the interpolated space with step 0.2 sample units).
+                        dec10w = 0.2 * sampleunits_to_ms(si,  AHP_decay_10to10);
+                        dec30w = 0.2 * sampleunits_to_ms(si,  AHP_decay_30to30);
+                        dec70w =0.2 * sampleunits_to_ms(si,  AHP_decay_70to70);
+                        dec90w =0.2 * sampleunits_to_ms(si,  AHP_decay_90to90);
+            
+                        dec90_30w = 0.2 * sampleunits_to_ms(si,  AHP_decay_90to30);
+                        dec10_90w = 0.2 * sampleunits_to_ms(si,  AHP_decay_10to90);
+            
+            
+                        %%%%%%%% AP properties %%%%%%%%%%%%%%%%%%%%%%%%%%%%
+                        interp_hw_AP = numel(vq_1tomax)+ AP_50_dec - AP_50_rise;
+                        interp_hw_AP_time = 0.2 * sampleunits_to_ms(si,  interp_hw_AP);
+            
+                        %minpoint and maxpoints, in terms of whole data
+            
+                        minpoint_in_trace = find(test_spike == test_spike(minpoint) ) + starttime;
+            
+                        maxpoint_in_trace = find(test_spike == test_spike(maxpoint) ) + starttime;
+            
+            
+                        spikeloc = sampleunits_to_ms(si,mainpeakloc); % %
+                        minp = data(minpoint_in_trace); % %
+                        minpInTrace =sampleunits_to_ms(si, minpoint_in_trace(1));
+                        maxpointdata = data(maxpoint_in_trace); % %
+                        maxpointInTrace =sampleunits_to_ms(si,maxpoint_in_trace(1)); % %
+            
+            
+                        %%% put into table %%%
+            
+                        multipleVariablesRow1= [filename, current_injected(a), freq_in_hz, spikeloc(1), threshold_voltage(1), amplitude(1), AHP_amp_real(1), minp(1),minpInTrace(1), maxpointdata(1), maxpointInTrace(1), interp_hw_AP_time, AHP_30(1), AHP_50(1), AHP_70(1), AHP_90(1), interp_hw_AHP_time, dec10w(1), dec30w(1), dec70w(1), dec90w(1), dec90_30w(1), dec10_90w(1), sampleunits_to_ms(si, risingDuration), sampleunits_to_ms(si, fallingDuration)];
+            
+                        M1= array2table(multipleVariablesRow1, 'VariableNames', myVarnames1);
+        
+                    end
                 end
+    
+    
             end
-
-
         end
     end
 end
 end
-
+    
 

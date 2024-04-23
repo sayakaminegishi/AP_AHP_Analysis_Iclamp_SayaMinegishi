@@ -1,4 +1,16 @@
+
 newpath = "/Users/sayakaminegishi/MATLAB";
 userpath(newpath)
 
-Apr8_batchEVOKED("wky","myexcel.xlsx")
+Apr8_batchEVOKED("wky","WKYevoked_apr15ls.xlsx")
+%Apr8_batchEVOKED("shr","SHRevoked_apr15ls.xlsx",1) %1 = analyze LAST SWEEP ONLY!!!
+
+
+CMA_batch_analysisFeb17("spontaneous","2024_02_09_04_0003_analysis.xlsx")
+%first sheet= burst properties, second sheet = avg of singlets properties
+
+% Apr8_batchEVOKED("jason_2005","jason_2005_recording5.xlsx")
+% 
+% Apr8_batchEVOKED("2005_01_13_c1","jason_2006_recordingall.xlsx")
+
+

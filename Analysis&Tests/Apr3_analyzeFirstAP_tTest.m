@@ -8,7 +8,7 @@ close all
 clear all
 
 % Define the headers for the table
-headers = {'Property', 'p-val', 'alpha', 'Result'};
+headers = {'Property', 'p-val', 'alpha', 'df', 't-stat', 'Result'};
 
 % Create the table
 sumtable= zeros(0,numel(headers));
@@ -19,8 +19,8 @@ summaryTable = array2table(sumtable, 'VariableNames', headers);
 
 %%%% load data from excel spreadsheets
 
-SHRTable = readtable("/Users/sayakaminegishi/Documents/AP analysis packages Saya M/ANALYSES_March 2024/APR3ANALYSIS/Apr3SHREVOKED.xlsx","TextType","string");
-WKYTable = readtable("/Users/sayakaminegishi/Documents/AP analysis packages Saya M/ANALYSES_March 2024/APR3ANALYSIS/Apr3WKYEVOKED.xlsx","TextType","string");
+SHRTable = readtable("/Users/sayakaminegishi/MATLAB/Projects/AP_AHP_Analysis_Iclamp_SayaMinegishi/Analyses/SHRevoked_apr15ls.xlsx","TextType","string");
+WKYTable = readtable("/Users/sayakaminegishi/MATLAB/Projects/AP_AHP_Analysis_Iclamp_SayaMinegishi/Analyses/WKYevoked_apr15ls.xlsx","TextType","string");
 
 strain = ["WKYN", "SHRN"];
 
@@ -40,7 +40,7 @@ else
 end
 
 %make a new row in the table
-newRow = {'AP_Threshold', p, alpha, str};
+newRow = {'AP_Threshold', p, alpha, stats.df, stats.tstat, str};
 summaryTable = [summaryTable; newRow]; %add the new row to the summary table
 
 %%%%%%%% compare current injected to evoke first AP %%%%%%%%%%%%%%
@@ -57,7 +57,7 @@ else
    str='There is no significant difference in the mean current injected between the two strains.';
 end
 %make a new row in the table
-newRow = {'current_required_for_firstAP', p, alpha, str};
+newRow = {'current_required_for_firstAP', p, alpha,stats.df, stats.tstat, str};
 summaryTable = [summaryTable; newRow]; %add the new row to the summary table
 
 %%%%%%%% compare frequency evoked %%%%%%%%%%%%%%
@@ -75,7 +75,7 @@ else
 end
 
 %make a new row in the table
-newRow = {'frequency_at_minimum_req_current', p, alpha, str};
+newRow = {'frequency_at_minimum_req_current', p, alpha, stats.df, stats.tstat, str};
 summaryTable = [summaryTable; newRow]; %add the new row to the summary table
 
 
@@ -150,7 +150,7 @@ else
 end
 
 %make a new row in the table
-newRow = {'AP_amplitude', p, alpha, str};
+newRow = {'AP_amplitude', p, alpha, stats.df, stats.tstat,str};
 summaryTable = [summaryTable; newRow]; %add the new row to the summary table
 
 
@@ -168,7 +168,7 @@ else
 end
 
 %make a new row in the table
-newRow = {'AHP_amplitude', p, alpha,str};
+newRow = {'AHP_amplitude', p, alpha,stats.df, stats.tstat,str};
 summaryTable = [summaryTable; newRow]; %add the new row to the summary table
 
 
@@ -186,7 +186,7 @@ else
 end
 
 %make a new row in the table
-newRow = {'AHP_half_width', p, alpha, str};
+newRow = {'AHP_half_width', p, alpha, stats.df, stats.tstat,str};
 summaryTable = [summaryTable; newRow]; %add the new row to the summary table
 
 
@@ -204,7 +204,7 @@ else
     str=('There is no significant difference in the mean AP half width between the two strains.');
 end
 %make a new row in the table
-newRow = {'AP_half_width', p, alpha, str};
+newRow = {'AP_half_width', p, alpha, stats.df, stats.tstat,str};
 summaryTable = [summaryTable; newRow]; %add the new row to the summary table
 
 
@@ -223,7 +223,7 @@ else
 end
 
 %make a new row in the table
-newRow = {'AHP_90-30%_width', p, alpha, str};
+newRow = {'AHP_90-30%_width', p, alpha, stats.df, stats.tstat,str};
 summaryTable = [summaryTable; newRow]; %add the new row to the summary table
 
 
@@ -237,6 +237,6 @@ numcells_eachgroup = ("Tested with " + n_SHR + " SHR cells and " + n_WKY + " WKY
 
 display(numcells_eachgroup);
 
-filenameExcelDoc = "summary_table_ttests_apr3.xlsx"
+filenameExcelDoc = "apr15lastsw.xlsx"
 writetable(summaryTable, filenameExcelDoc, 'Sheet', 1); %export summary table to excel
 writematrix(numcells_eachgroup, filenameExcelDoc, 'Sheet' ,2)
