@@ -13,7 +13,7 @@ function [singletAnalysisRow, T] = CMA_burst_analysis_feb17(filename1)
 
 % created by Sayaka (Saya) Minegishi
 % contact: minegishis@brandeis.edu
-% date: 4/22/24
+% date: 4/24/24
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -137,7 +137,8 @@ else
   
     % ISI histogram
     figure;
-    binwidth_hist = 100;  % do 1 for 1ms bin width, based on Selinger et al. ADJUST THIS VALUE AS NECESSARY!!!
+    %binwidth_hist = 100;  % do 1 for 1ms bin width, based on Selinger et al. ADJUST THIS VALUE AS NECESSARY!!!
+    binwidth_hist = 10;  % do 1 for 1ms bin width, based on Selinger et al. ADJUST THIS VALUE AS NECESSARY!!!
     
     isi_histogram = get_isi_histogram(isi_list, binwidth_hist); 
     

@@ -8,5 +8,7 @@ userpath(newpath)
 
 
 CMA_batch_analysisFeb17("spontaneous","spont_all_apr23_2.xlsx")
+
+%CMA_batch_analysisApr24("spontaneous","spont_all_apr24_testing.xlsx");
 %first sheet= burst properties, second sheet = avg of singlets properties
 
